@@ -7,9 +7,11 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CatalogService } from './catalog.service';
 import { CreateItemDto, UpdateItemDto } from './dto/item.dto';
 
+@ApiTags('catalog')
 @Controller('catalog')
 export class CatalogController {
   constructor(private readonly catalogService: CatalogService) {}
