@@ -50,7 +50,7 @@ export class CheckoutService {
     
     let subtotal = 0;
     let total = 0;
-    const itemsWithDiscounts = [];
+    const itemsWithDiscounts: any[] = [];
 
     for (const orderItem of items) {
       const catalogItem = this.catalogService.findOne(orderItem.barcode);
@@ -60,7 +60,7 @@ export class CheckoutService {
       subtotal += itemCost;
 
       let finalPrice = catalogItem.price;
-      let appliedCampaign = null;
+      let appliedCampaign: string | null = null;
 
       for (const campaign of campaigns) {
         try {
