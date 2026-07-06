@@ -1,0 +1,166 @@
+<div class="pos-layout">
+  <!-- Left Panel: Input & Catalog Shortcuts -->
+  <div class="glass-panel input-panel">
+    <h2>Scanner</h2>
+    
+    @if (!checkoutService.orderId()) {
+      <div class="start-order">
+        <button class="btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; margin-top: 1rem;" (click)="startOrder()">
+          Start New Order
+        </button>
+      </div>
+    }
+
+    @if (checkoutService.orderId()) {
+      <div class="scanner-input">
+        <form (ngSubmit)="addItem()" #addForm="ngForm" style="margin-top: 1rem;">
+          <div class="form-group">
+            <label>Barcode</label>
+            <input type="text" [(ngModel)]="barcodeInput" name="barcode" autofocus required placeholder="Scan or type barcode...">
+          </div>
+          <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" [(ngModel)]="quantityInput" name="quantity" min="1" required>
+          </div>
+          <button type="submit" class="btn-primary" style="width: 100%" [disabled]="!addForm.valid">Add Item</button>
+        </form>
+        
+        @if (errorMsg()) {
+          <div class="error-msg">
+            {{ errorMsg() }}
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Right Panel: Cart / Receipt -->
+  <div class="glass-panel cart-panel">
+    <div class="cart-header">
+      <h2>Current Order</h2>
+      @if (checkoutService.orderId()) {
+        <span class="order-id">#{{ checkoutService.orderId() | slice:0:8 }}</span>
+      }
+    </div>
+
+    <div class="cart-items">
+      @if (checkoutService.orderId() && checkoutService.cartState().items.length > 0) {
+        <table class="modern-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of checkoutService.cartState().items; track item.barcode) {
+              <tr>
+                <td>
+                  <div>{{ item.name }}</div>
+                  @if (item.appliedCampaign) {
+                    <div class="discount-badge">{{ item.appliedCampaign }}</div>
+                  }
+                </td>
+                <td>{{ item.quantity }}</td>
+                <td>
+                  <div [class.strikethrough]="item.originalPrice !== item.finalPrice">{{ (item.originalPrice / 100) | currency }}</div>
+                  @if (item.originalPrice !== item.finalPrice) {
+                    <div class="final-price">{{ (item.finalPrice / 100) | currency }}</div>
+                  }
+                </td>
+                <td class="item-total">{{ ((item.finalPrice * item.quantity) / 100) | currency }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      } @else {
+        <div class="empty-cart">
+          Cart is empty.
+        </div>
+      }
+    </div>
+
+    @if (checkoutService.orderId()) {
+      <div class="cart-summary">
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span>{{ (checkoutService.cartState().subtotal / 100) | currency }}</span>
+        </div>
+        @if (checkoutService.cartState().subtotal !== checkoutService.cartState().total) {
+          <div class="summary-row">
+            <span>Discounts:</span>
+            <span class="discount-amount">-{{ ((checkoutService.cartState().subtotal - checkoutService.cartState().total) / 100) | currency }}</span>
+          </div>
+        }
+        <div class="summary-row total">
+          <span>Total:</span>
+          <span>{{ (checkoutService.cartState().total / 100) | currency }}</span>
+        </div>
+        
+        <button class="btn-primary pay-btn" [disabled]="checkoutService.cartState().items.length === 0" (click)="showPaymentModal.set(true)">
+          Proceed to Payment
+        </button>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Payment Modal -->
+@if (showPaymentModal()) {
+  <div class="modal-overlay">
+    <div class="glass-panel modal-content">
+      <h2>Payment</h2>
+      <div class="total-to-pay">Total: {{ (checkoutService.cartState().total / 100) | currency }}</div>
+      
+      <div class="form-group" style="margin-top: 1.5rem;">
+        <label>Cash Given (cents)</label>
+        <input type="number" [(ngModel)]="paymentAmount" autofocus placeholder="Amount in cents">
+      </div>
+      
+      <div class="modal-actions">
+        <button class="btn-danger" (click)="showPaymentModal.set(false)">Cancel</button>
+        <button class="btn-primary" (click)="processPayment()" [disabled]="paymentAmount < checkoutService.cartState().total">Pay & Print Receipt</button>
+      </div>
+      @if (paymentError()) {
+        <div class="error-msg">
+          {{ paymentError() }}
+        </div>
+      }
+    </div>
+  </div>
+}
+
+<!-- Receipt Modal -->
+@if (receiptData()) {
+  <div class="modal-overlay">
+    <div class="glass-panel modal-content receipt-modal">
+      <h2 style="text-align: center;">Store Receipt</h2>
+      <div class="receipt-body">
+        @for (item of receiptData().items; track item.barcode) {
+          <div class="receipt-row">
+            <span>{{ item.quantity }}x {{ item.name }}</span>
+            <span>{{ ((item.finalPrice * item.quantity) / 100) | currency }}</span>
+          </div>
+        }
+        <hr>
+        <div class="receipt-row">
+          <span>Total</span>
+          <span>{{ (receiptData().total / 100) | currency }}</span>
+        </div>
+        <div class="receipt-row">
+          <span>Cash</span>
+          <span>{{ (receiptData().paymentAmount / 100) | currency }}</span>
+        </div>
+        <div class="receipt-row">
+          <span>Change</span>
+          <span>{{ (receiptData().change / 100) | currency }}</span>
+        </div>
+      </div>
+      <div class="modal-actions" style="justify-content: center; margin-top: 2rem;">
+        <button class="btn-primary" (click)="closeReceipt()">Done</button>
+      </div>
+    </div>
+  </div>
+}

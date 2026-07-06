@@ -1,0 +1,153 @@
+.pos-layout {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 2rem;
+  height: calc(100vh - 120px);
+}
+.input-panel {
+  display: flex;
+  flex-direction: column;
+}
+.cart-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+h2 {
+  margin: 0;
+  color: var(--text-primary);
+}
+.order-id {
+  color: var(--text-secondary);
+  font-family: monospace;
+}
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+}
+.cart-items tbody tr {
+  animation: fadeIn 0.3s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.empty-cart {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 4rem;
+  font-size: 1.2rem;
+}
+.strikethrough {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+.final-price {
+  color: var(--success);
+  font-weight: 500;
+}
+.item-total {
+  font-weight: bold;
+  color: var(--text-primary);
+}
+.discount-badge {
+  display: inline-block;
+  background: rgba(236, 72, 153, 0.2);
+  color: var(--accent-color);
+  font-size: 0.7rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  margin-top: 0.2rem;
+}
+.cart-summary {
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+  margin-top: 1rem;
+}
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+.summary-row.total {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  font-weight: bold;
+  margin-top: 1rem;
+  border-top: 1px dashed var(--border-color);
+  padding-top: 1rem;
+}
+.discount-amount {
+  color: var(--success);
+}
+.pay-btn {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modal-content {
+  width: 400px;
+  max-width: 90vw;
+}
+.total-to-pay {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--success);
+  text-align: center;
+  margin: 1.5rem 0;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.receipt-modal {
+  width: 350px;
+  background: #f8fafc;
+  color: #0f1115;
+}
+.receipt-modal h2 { color: #0f1115; }
+.receipt-body {
+  font-family: monospace;
+  font-size: 1.1rem;
+}
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+hr {
+  border: none;
+  border-top: 1px dashed #94a3b8;
+  margin: 1rem 0;
+}
+.error-msg {
+  color: var(--danger);
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}

@@ -1,0 +1,31 @@
+.header-actions { margin-bottom: 2rem; }
+h2 { margin-top: 0; color: var(--text-primary); }
+.stock-badge {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--success);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+.stock-badge.low-stock {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--danger);
+}
+.stock-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.small-input {
+  width: 80px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem;
+  color: white;
+}
+.empty-state {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 3rem !important;
+}

@@ -1,0 +1,41 @@
+<div class="admin-container">
+  <div class="header-actions">
+    <h2>Inventory Management</h2>
+  </div>
+
+  <div class="glass-panel">
+    <table class="modern-table">
+      <thead>
+        <tr>
+          <th>Barcode</th>
+          <th>Product Name</th>
+          <th>Current Stock</th>
+          <th>Quick Update</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of inventoryItems(); track item.barcode) {
+          <tr>
+            <td>{{ item.barcode }}</td>
+            <td>{{ item.name }}</td>
+            <td>
+              <span class="stock-badge" [class.low-stock]="item.stockCount < 10">
+                {{ item.stockCount }}
+              </span>
+            </td>
+            <td>
+              <div class="stock-actions">
+                <input type="number" [(ngModel)]="item.adjustAmount" class="small-input" placeholder="Qty">
+                <button class="btn-primary" (click)="updateStock(item)">Add</button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" class="empty-state">No items found in catalog.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

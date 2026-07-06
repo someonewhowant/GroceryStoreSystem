@@ -1,0 +1,24 @@
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+}
+.logo {
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: var(--text-primary);
+}
+nav a {
+  margin-left: 1rem;
+  text-decoration: none;
+  color: var(--text-secondary);
+}
+nav a.active {
+  color: var(--primary-color);
+}
+.app-content {
+  padding: 2rem;
+}
